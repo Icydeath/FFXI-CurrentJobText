@@ -25,7 +25,7 @@ defaults.text = {
 settings = config.load(defaults)
 
 function add_spacers(str)
-	local char_tbl = chars(str)
+	local char_tbl = chars_to_table(str)
 	local new_str = ''
 	for i = 1, #str do
 		new_str = new_str..char_tbl[i]..' '
@@ -33,7 +33,7 @@ function add_spacers(str)
 	return tostring(new_str)
 end
 
-function chars(str)
+function chars_to_table(str)
 	local strc = {}
 	for i = 1, #str do table.insert(strc, string.sub(str, i, i)) end
 	return strc
@@ -77,13 +77,14 @@ function addon_command(...)
 		if commands[1] == 'level' or commands[1] == 'lvl' then
 			settings.show_level = not settings.show_level
 		elseif commands[1] == 'toggle' or commands[1] == 't' or commands[1] == 'long' or commands[1] == 'short' then
-			settings.show_level = not settings.show_level
+			settings.long_version = not settings.long_version
 		else
 			error('Invalid command.')
 			log('Commands: [level,toggle]')
 			return
 		end
-		settings.save('all')
+		
+		config.save(settings, 'all')
 		refresh_text()
 	else
 		log('//cjt level,toggle')
